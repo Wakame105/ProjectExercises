@@ -1,22 +1,25 @@
 'use stript';
 let map;                                    //マップ
-var center={lat:34.682754, lng:135.159659}; //使うことない中心
+var center={lat:34.682754, lng:135.159659}; //使うことない中心の定数
 var infoWindow;                             //今は使っていない情報ウインドウ
-let data;                                   //csvの中のデータ
+let data;                                   //csvの中のデータを取る用の変数
 
-//現在位置を取ってくる
+//ジオロケーションのオプション
 var options = {
   enableHighAccuracy: true,
   timeout: 1000,
   maximumAge: 0
 };
 
-function getLocationPromise () {
+//現在位置を取ってくる関数
+function getLocationPromise ()
+{
   return new Promise((resolve, reject) => {
       navigator.geolocation.watchPosition(resolve, reject, options);
   });
 }
 
+//CSVデータを読み取る関数
 async function loadCSVData(){
   const response = await fetch('Source/wcdata_UTF8.csv');
   const text = await response.text();
@@ -33,44 +36,37 @@ async function loadCSVData(){
   //   .join('');
   //for(let i=0;i<data.length-1;i++)
   // document.getElementById('js-csv').innerHTML = articles;
-  initMap();
+  //検証用にサイトに直接表示していた跡
 }
 
 //ここから下がマップの処理
 async function initMap() {
   
- 
-
+  loadCSVData();
+ //ここで現在地の座標(緯度経度を取ってくる)
   const position = await getLocationPromise();
-
-  //ここで現在地の座標(緯度経度を取ってくる)
-  let Current_Lcn={ lat: 34.6996256, lng: 135.1913718};
-  Current_Lcn = { lat: position.coords.latitude, lng: position.coords.longitude };
-  // Request needed libraries.
+  let Current_Pos={ lat: 34.6996256, lng: 135.1913718};
+  Current_Pos = { lat: position.coords.latitude, lng: position.coords.longitude };
+  // ライブラリの要求
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
 
-  // The map, centered at Uluru
+  // マップの中心地を指定
   map = new Map(document.getElementById("map"), {
     zoom: 15,
-    center: Current_Lcn,
+    center: Current_Pos,
     mapId: "DEMO_MAP_ID",
   });
+  //現在地のマーカー
   const m_m = new AdvancedMarkerView({
     map:map,
-    position: Current_Lcn,
-    title: "current_Lcn"
-    //icon:'P_20240420_080129.jpg'
+    position: Current_Pos,
+    title: "current_Pos",
+    //icon:'P_20240420_080129.jpg'  //ピンを画像にも置き換え可能
   });
-  // マーカー
-  // const marker2 = new AdvancedMarkerView({
-  //   map:map,
-  //   position: marker_all
-  //   //icon:'P_20240420_080129.jpg'
-  // });
 
-  //=========================================================================
+  //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
   for(let i=1;i<data.length;i++)
     {
     const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
@@ -87,12 +83,13 @@ async function initMap() {
       });
     }
 
+    //情報窓をクリックしたら出す
   infoWindow = new google.maps.InfoWindow({
     content: '<div class="sample">TAM 三宮</div>'
   });
-  // marker2.addListener('gmp-click', function(){
-  //   infoWindow.open(map,marker2);
-  // });
+  m_m.addListener('gmp-click', function(){
+    infoWindow.open(map,m_m);
+  });
 
   //緯度経度を調べる
   var geocoder;
@@ -100,8 +97,9 @@ async function initMap() {
 
   geocoder.geocode(
     {
-      'address': '愛媛県松山市丸之内１' // TAM 東京
-    }, function(results, status) 
+      'address': '愛媛県松山市丸之内１' // ここに住所を入れると...?
+    }
+    , function(results, status) 
     { // 結果
         if (status === google.maps.GeocoderStatus.OK) 
         { // ステータスがOKの場合
@@ -113,12 +111,12 @@ async function initMap() {
         map: map,
         position: results[0].geometry.location
   });
-          } else 
-          { // 失敗した場合
-          console.group('Error');
-           console.log(results);
-           console.log(status);
-          }
+        } else 
+        { // 失敗した場合
+        console.group('Error');
+        console.log(results);
+        console.log(status);
+        }
     });
   // infoWindow = new google.maps.InfoWindow({ // 吹き出しの追加
   //   content: '<div class="sample">TAM 大阪</div>' // 吹き出しに表示する内容
@@ -128,7 +126,7 @@ async function initMap() {
   // });
 }
 
+initMap();
 
+//memo===================================
 
-
-loadCSVData();
