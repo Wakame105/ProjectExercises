@@ -22,19 +22,17 @@ async function loadCSVData(){
   const text = await response.text();
   data = text.trim().split('\n')
     .map(line => line.split(',').map(x => x.trim()));
-  const articles = data.slice(1)
-    .map(x => `
-      <article>
-        <h3>${x[0]}</h3>
-        <p>${x[1]}</p>
-        <p>${x[3]}</p>
-      </article>
-    `)
-    .join('');
+  // const articles = data.slice(1)
+  //   .map(x => `
+  //     <article>
+  //       <h3>${x[0]}</h3>
+  //       <p>${x[1]}</p>
+  //       <p>${x[3]}</p>
+  //     </article>
+  //   `)
+  //   .join('');
   //for(let i=0;i<data.length-1;i++)
-  
-    console.log(data);
-  document.getElementById('js-csv').innerHTML = articles;
+  // document.getElementById('js-csv').innerHTML = articles;
   initMap();
 }
 
@@ -46,7 +44,8 @@ async function initMap() {
   const position = await getLocationPromise();
 
   //ここで現在地の座標(緯度経度を取ってくる)
-  const Current_Lcn = { lat: position.coords.latitude, lng: position.coords.longitude };
+  let Current_Lcn={ lat: 34.6996256, lng: 135.1913718};
+  Current_Lcn = { lat: position.coords.latitude, lng: position.coords.longitude };
   // Request needed libraries.
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
@@ -101,7 +100,7 @@ async function initMap() {
 
   geocoder.geocode(
     {
-      'address': '兵庫県神戸市中央区布引町２丁目３−５' // TAM 東京
+      'address': '愛媛県松山市丸之内１' // TAM 東京
     }, function(results, status) 
     { // 結果
         if (status === google.maps.GeocoderStatus.OK) 
