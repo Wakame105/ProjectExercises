@@ -19,6 +19,15 @@ function getLocationPromise ()
   });
 }
 
+//マーカーの背景色を変更する関数
+function changebackgroundColor(){
+  const pinViewBackground = new google.maps.marker.PinView({
+    background: "#FBBC04",
+  });
+  return pinViewBackground.element;
+}
+
+
 //CSVデータを読み取る関数
 async function loadCSVData(){
   const response = await fetch('Source/wcdata_UTF8.csv');
@@ -54,7 +63,7 @@ async function initMap() {
 
   // マップの中心地を指定
   map = new Map(document.getElementById("map"), {
-    zoom: 15,
+    zoom: 17,
     center: Current_Pos,
     mapId: "DEMO_MAP_ID",
   });
@@ -62,7 +71,8 @@ async function initMap() {
   const m_m = new AdvancedMarkerView({
     map:map,
     position: Current_Pos,
-    title: "current_Pos",
+    title: "現在地",
+    content: changebackgroundColor(),
     //icon:'P_20240420_080129.jpg'  //ピンを画像にも置き換え可能
   });
 
