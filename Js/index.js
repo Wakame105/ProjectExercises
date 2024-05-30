@@ -22,7 +22,7 @@ function getLocationPromise ()
 //マーカーの背景色を変更する関数
 function changebackgroundColor(){
   const pinViewBackground = new google.maps.marker.PinView({
-    background: "#FBBC04",
+    background: "#1269e2",
   });
   return pinViewBackground.element;
 }
@@ -73,6 +73,7 @@ async function initMap() {
     position: Current_Pos,
     title: "現在地",
     content: changebackgroundColor(),
+    collisionBehavior: REQUIRED_AND_HIDES_OPTIONAL,
     //icon:'P_20240420_080129.jpg'  //ピンを画像にも置き換え可能
   });
 
@@ -88,7 +89,8 @@ async function initMap() {
     const marker3 = new AdvancedMarkerView(
       {
       map:map,
-      position: marker_all
+      position: marker_all,
+      collisionBehavior: REQUIRED,
       //icon:'P_20240420_080129.jpg'
       });
     }
