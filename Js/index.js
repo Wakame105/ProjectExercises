@@ -62,7 +62,7 @@ async function initMap() {
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
 
   //マーカーの優先度
-  let collisionBehavior = new google.maps.CollisionBehavior.REQUIRED;
+  //let collisionBehavior = new google.maps.CollisionBehavior.REQUIRED;
 
   // マップの中心地を指定
   map = new Map(document.getElementById("map"), {
