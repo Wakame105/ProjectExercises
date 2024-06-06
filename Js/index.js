@@ -2,8 +2,54 @@
 let map;                                    //マップ
 var center={lat:34.682754, lng:135.159659}; //使うことない中心の定数
 var infoWindow;                             //今は使っていない情報ウインドウ
-let data;                                   //csvの中のデータを取る用の変数
+let data;                                   //csvの中のデータを取る用の変数                        
+var ToiletFlg=false;
+var markers=[];
 
+//トグルスイッチ
+const button = document.querySelector('button');
+button.addEventListener('click',toggleDisplay);
+function toggleDisplay(){
+  if(ToiletFlg)
+  {
+    for(let i=1;i<markers.length;i++)
+    {
+    markers[i].setMap(null);
+    }
+    ToiletFlg=false;
+  }
+  else
+  {
+  MKtoiletMarker();  
+  }
+}
+
+//トイレのマーカーを打つ関数
+async function MKtoiletMarker(){
+  if(!ToiletFlg)
+  {
+  const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+  //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
+  for(let i=1;i<data.length;i++)
+    {
+    const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
+    const marker_lng = Number(data.slice(i,i+1).map(x=> `${x[3]}`).join(''));
+    const marker_all = { lat: marker_lat, lng: marker_lng }; 
+    // console.log(marker_lat);
+    // console.log(marker_lng);
+    // console.log(marker_all);
+    const marker3 = new AdvancedMarkerView(
+      {
+      map:map,
+      position: marker_all,
+      //collisionBehavior: REQUIRED,
+      //icon:'P_20240420_080129.jpg'
+      });
+      markers.push(marker3);
+    }
+    ToiletFlg=true;
+  }
+}
 //ジオロケーションのオプション
 var options = {
   enableHighAccuracy: true,
@@ -71,33 +117,17 @@ async function initMap() {
     mapId: "DEMO_MAP_ID",
   });
   //現在地のマーカー
-  const m_m = new AdvancedMarkerView({
+  let m_m = new AdvancedMarkerView({
     map:map,
     position: Current_Pos,
     title: "現在地",
     content: changebackgroundColor(),
     //collisionBehavior: REQUIRED_AND_HIDES_OPTIONAL,
-    //icon:'P_20240420_080129.jpg'  //ピンを画像にも置き換え可能
+    //icon:'./Source/P_20240420_091034.jpg'  //ピンを画像にも置き換え可能
   });
-
-  //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
-  for(let i=1;i<data.length;i++)
-    {
-    const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
-    const marker_lng = Number(data.slice(i,i+1).map(x=> `${x[3]}`).join(''));
-    const marker_all = { lat: marker_lat, lng: marker_lng }; 
-    console.log(marker_lat);
-    console.log(marker_lng);
-    console.log(marker_all);
-    const marker3 = new AdvancedMarkerView(
-      {
-      map:map,
-      position: marker_all,
-      //collisionBehavior: REQUIRED,
-      //icon:'P_20240420_080129.jpg'
-      });
-    }
-
+  markers.push(m_m);
+  
+  MKtoiletMarker();
     //情報窓をクリックしたら出す
   infoWindow = new google.maps.InfoWindow({
     content: '<div class="sample">TAM 三宮</div>'
@@ -106,6 +136,7 @@ async function initMap() {
     infoWindow.open(map,m_m);
   });
 
+  
   //緯度経度を調べる
   var geocoder;
   geocoder = new google.maps.Geocoder();
@@ -142,6 +173,5 @@ async function initMap() {
 }
 
 initMap();
-
 //memo===================================
 
