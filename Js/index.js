@@ -37,6 +37,7 @@ async function MKtoiletMarker(){
     {
       alert('データの読み込みに失敗しました。\nページを再読み込みします。' );
       window.location.reload();
+      let nothing=0;
     }
 
   for(let i=1;i<data.length;i++)
