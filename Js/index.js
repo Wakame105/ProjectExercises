@@ -32,10 +32,13 @@ async function MKtoiletMarker(){
   {
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
   //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
-  if(data.length<1)
+  console.log(data);
+  if(data==null)
     {
-      alert('warmingnet');
+      alert('データの読み込みに失敗しました。\nページを再読み込みします。' );
+      window.location.reload();
     }
+
   for(let i=1;i<data.length;i++)
     {
     const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
@@ -86,18 +89,6 @@ async function loadCSVData(){
   const text = await response.text();
   data = text.trim().split('\n')
     .map(line => line.split(',').map(x => x.trim()));
-  // const articles = data.slice(1)
-  //   .map(x => `
-  //     <article>
-  //       <h3>${x[0]}</h3>
-  //       <p>${x[1]}</p>
-  //       <p>${x[3]}</p>
-  //     </article>
-  //   `)
-  //   .join('');
-  //for(let i=0;i<data.length-1;i++)
-  // document.getElementById('js-csv').innerHTML = articles;
-  //検証用にサイトに直接表示していた跡
 }
 
 //ここから下がマップの処理
