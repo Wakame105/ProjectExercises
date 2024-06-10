@@ -3,20 +3,22 @@ let map;                                    //マップ
 var center={lat:34.682754, lng:135.159659}; //使うことない中心の定数
 var infoWindow;                             //今は使っていない情報ウインドウ
 let data;                                   //csvの中のデータを取る用の変数                        
-var ToiletFlg=false;
-var markers=[];
+var TMarkerExpired=true;                    //トイレのマーカー存在フラグ
+var TMarkers=[];                            //トイレのマーカーの配列
 
 //トグルスイッチ
 const button = document.querySelector('button');
 button.addEventListener('click',toggleDisplay);
 function toggleDisplay(){
-  if(ToiletFlg)
+  if(!TMarkerExpired)
   {
-    for(let i=1;i<markers.length;i++)
+    for(let i=0;i<TMarkers.length;i++)
     {
-    markers[i].setMap(null);
+    TMarkers[i].setMap(null);
     }
-    ToiletFlg=false;
+    TMarkerExpired=true;
+    TMarkers=[];
+    console.log(TMarkers);
   }
   else
   {
@@ -26,10 +28,14 @@ function toggleDisplay(){
 
 //トイレのマーカーを打つ関数
 async function MKtoiletMarker(){
-  if(!ToiletFlg)
+  if(TMarkerExpired)
   {
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
   //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
+  if(data.length<1)
+    {
+      alert('warmingnet');
+    }
   for(let i=1;i<data.length;i++)
     {
     const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
@@ -45,9 +51,9 @@ async function MKtoiletMarker(){
       //collisionBehavior: REQUIRED,
       //icon:'P_20240420_080129.jpg'
       });
-      markers.push(marker3);
+      TMarkers.push(marker3);
     }
-    ToiletFlg=true;
+    TMarkerExpired=false;
   }
 }
 //ジオロケーションのオプション
@@ -125,7 +131,6 @@ async function initMap() {
     //collisionBehavior: REQUIRED_AND_HIDES_OPTIONAL,
     //icon:'./Source/P_20240420_091034.jpg'  //ピンを画像にも置き換え可能
   });
-  markers.push(m_m);
   
   MKtoiletMarker();
     //情報窓をクリックしたら出す
