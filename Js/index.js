@@ -148,7 +148,7 @@ async function initMap() {
         console.group('Success');
         console.log(results[0].geometry.location);
         console.log(status);
-        //マーカー, positioned at Uluru
+        //マーカー
         const marker = new AdvancedMarkerView({
         map: map,
         position: results[0].geometry.location
