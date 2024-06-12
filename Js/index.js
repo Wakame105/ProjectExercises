@@ -60,8 +60,13 @@ async function MKtoiletMarker(){
       const info = new google.maps.InfoWindow({
         content: BName+'（'+BWhere+'）',
       });
-      marker3.addListener('gmp-click', function(){
+      marker3.addListener('gmp-click', function()
+      {
         info.open(map,marker3);
+      });
+      info.addListener('visible',function()
+      {
+        map.panTo(marker_all)
       });
     }
     TMarkerExpired=false;
