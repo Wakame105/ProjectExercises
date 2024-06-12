@@ -1,7 +1,7 @@
 'use stript';
 let map;                                    //マップ
 var center={lat:34.682754, lng:135.159659}; //使うことない中心の定数
-var infoWindow;                             //今は使っていない情報ウインドウ
+var infoWindow;                             //情報ウインドウ
 let data;                                   //csvの中のデータを取る用の変数                        
 var TMarkerExpired=true;                    //トイレのマーカー存在フラグ
 var TMarkers=[];                            //トイレのマーカーの配列
@@ -30,7 +30,7 @@ function toggleDisplay(){
 async function MKtoiletMarker(){
   if(TMarkerExpired)
   {
-  const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
   console.log(data);
   if(data==null)
@@ -44,17 +44,25 @@ async function MKtoiletMarker(){
     const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
     const marker_lng = Number(data.slice(i,i+1).map(x=> `${x[3]}`).join(''));
     const marker_all = { lat: marker_lat, lng: marker_lng }; 
-    // console.log(marker_lat);
-    // console.log(marker_lng);
-    // console.log(marker_all);
-    const marker3 = new AdvancedMarkerView(
+    const BName = (data.slice(i,i+1).map(x=> `${x[1]}`).join(''));
+    const BAdress = (data.slice(i,i+1).map(x=> `${x[4]}`).join(''));
+    const BWhere = (data.slice(i,i+1).map(x=> `${x[6]}`).join(''));
+    const marker3 = new AdvancedMarkerElement(
       {
       map:map,
       position: marker_all,
-      //collisionBehavior: REQUIRED,
+      
       //icon:'P_20240420_080129.jpg'
       });
       TMarkers.push(marker3);
+
+      //情報ウィンド表示
+      const info = new google.maps.InfoWindow({
+        content: BName+'（'+BWhere+'）',
+      });
+      marker3.addListener('gmp-click', function(){
+        info.open(map,marker3);
+      });
     }
     TMarkerExpired=false;
   }
@@ -103,6 +111,7 @@ async function initMap() {
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+  const { collisionBehavior } = await  google.maps.importLibrary("marker");
 
   //マーカーの優先度
   //let collisionBehavior = new google.maps.CollisionBehavior.REQUIRED;
@@ -119,17 +128,17 @@ async function initMap() {
     position: Current_Pos,
     title: "現在地",
     content: changebackgroundColor(),
-    //collisionBehavior: REQUIRED_AND_HIDES_OPTIONAL,
+    //collisionBehavior: collisionBehavior.REQUIRED_AND_HIDES_OPTIONAL,
     //icon:'./Source/P_20240420_091034.jpg'  //ピンを画像にも置き換え可能
   });
   
   MKtoiletMarker();
     //情報窓をクリックしたら出す
-  infoWindow = new google.maps.InfoWindow({
+  let MInfoWindow = new google.maps.InfoWindow({
     content: '<div class="sample">TAM 三宮</div>'
   });
   m_m.addListener('gmp-click', function(){
-    infoWindow.open(map,m_m);
+    MInfoWindow.open(map,m_m);
   });
 
   
@@ -160,12 +169,6 @@ async function initMap() {
         console.log(status);
         }
     });
-  // infoWindow = new google.maps.InfoWindow({ // 吹き出しの追加
-  //   content: '<div class="sample">TAM 大阪</div>' // 吹き出しに表示する内容
-  // });
-  // marker2.addListener('click', function() { // マーカーをクリックしたとき
-  //   infoWindow.open(map, marker2); // 吹き出しの表示
-  // });
 }
 
 initMap();
