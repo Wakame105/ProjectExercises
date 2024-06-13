@@ -5,6 +5,8 @@ var infoWindow;                             //情報ウインドウ
 let data;                                   //csvの中のデータを取る用の変数                        
 var TMarkerExpired=true;                    //トイレのマーカー存在フラグ
 var TMarkers=[];                            //トイレのマーカーの配列
+var OpenWindow;
+var openFlg=false;
 
 //トグルスイッチ
 const button = document.querySelector('button');
@@ -33,6 +35,7 @@ async function MKtoiletMarker(){
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
   console.log(data);
+  //csvデータ読み込みエラー時の処理
   if(data==null)
     {
       alert('データの読み込みに失敗しました。\nページを再読み込みします。' );
@@ -60,13 +63,31 @@ async function MKtoiletMarker(){
       const info = new google.maps.InfoWindow({
         content: BName+'（'+BWhere+'）',
       });
+      //マーカーをクリックして情報ウインドが出ていなければ表示し、
+      //出ていればさっきまでのを閉じて新しく表示するか、閉じるか判別する処理
       marker3.addListener('gmp-click', function()
       {
-        info.open(map,marker3);
+        if(!openFlg){
+          OpenWindow=info;
+          openFlg=true;
+          info.open(map,marker3);
+          }
+        else{
+           if(OpenWindow!=info){
+            OpenWindow.close();
+            OpenWindow=info;
+            openFlg=true;
+            info.open(map,marker3);
+            }
+            else{
+            openFlg=false;
+            info.close();
+            }
+        }
       });
       info.addListener('visible',function()
       {
-        map.panTo(marker_all)
+        map.panTo(marker_all);
       });
     }
     TMarkerExpired=false;
@@ -137,6 +158,7 @@ async function initMap() {
     //icon:'./Source/P_20240420_091034.jpg'  //ピンを画像にも置き換え可能
   });
   
+  //トイレのマーカを作る
   MKtoiletMarker();
     //情報窓をクリックしたら出す
   let MInfoWindow = new google.maps.InfoWindow({
