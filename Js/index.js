@@ -20,7 +20,6 @@ function toggleDisplay(){
     }
     TMarkerExpired=true;
     TMarkers=[];
-    console.log(TMarkers);
   }
   else
   {
@@ -34,7 +33,6 @@ async function MKtoiletMarker(){
   {
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
   //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
-  console.log(data);
   //csvデータ読み込みエラー時の処理
   if(data==null)
     {
