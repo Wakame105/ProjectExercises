@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 .mapcontainar{
     padding: 30px;
     padding-top: 100px;
@@ -6,9 +8,11 @@
     height: 700px;
 }
 
+
 html,
 body{
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -22,4 +26,12 @@ header{
     padding: 20px 100px 15px 100px;
     background: rgba(195, 220, 197, 0.8);
     z-index: 100;
+}
+@media screen and (max-width: 768px) {
+    header{
+        padding: 1em;
+    }
+    #map{
+        height: 2000px;
+    }
 }

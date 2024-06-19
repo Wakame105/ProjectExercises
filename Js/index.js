@@ -84,6 +84,7 @@ async function MKtoiletMarker(){
       {
       map:map,
       position: marker_all,
+      title: BName,
       
       //icon:'P_20240420_080129.jpg'
       });
