@@ -3,6 +3,7 @@
 .mapcontainar{
     padding: 30px;
     padding-top: 100px;
+    width: 100%;
 }
 #map{
     height: 700px;
@@ -30,6 +31,9 @@ header{
 @media screen and (max-width: 768px) {
     header{
         padding: 1em;
+    }
+    header h3{
+        font-size: 10px;
     }
     #map{
         height: 2000px;
