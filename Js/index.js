@@ -7,10 +7,14 @@ var TMarkerExpired=true;                    //トイレのマーカー存在フ�
 var TMarkers=[];                            //トイレのマーカーの配列
 var OpenWindow;
 var openFlg=false;
+var m_position;
+var Distance=[];
 
 //トグルスイッチ
-const button = document.querySelector('button');
+const button = document.querySelector('#h-button');
 button.addEventListener('click',toggleDisplay);
+const s_button = document.querySelector("#s-button");
+s_button.addEventListener('click' ,toggleSearch);
 function toggleDisplay(){
   if(!TMarkerExpired)
   {
@@ -23,8 +27,36 @@ function toggleDisplay(){
   }
   else
   {
-  MKtoiletMarker();  
+  MKtoiletMarker();
   }
+}
+
+//(制作中)検索ボタン
+async function toggleSearch(){
+  
+  
+}
+
+//現在地からの距離格納する関数
+function SetDistance(latA ,lngA){
+  // //const origin1 = new google.maps.LatLng(m_position.coords.latitude,m_position.coords.longitude);
+  // let origin1 = new google.maps.LatLng(latA,lngA);
+  // const origin2 = 'Now Position';
+  // const destinationA = 'Where';
+  // //const destinationB = new google.maps.LatLng(latA,lngA);
+
+  // var service = new google.maps.DistanceMatrixService();
+  // service.getDistanceMatrix(
+  //   {
+  //     origins:[origin1,origin2],
+  //     destinations:[destinationA,destinationB],
+  //     travelMode: 'WALKING',
+  //   },callback);
+
+  //   function callback(response,status){
+  //     // see parsing the results for 
+  //     //the basics of a callback function.
+  //   }
 }
 
 //トイレのマーカーを打つ関数
@@ -106,6 +138,10 @@ function getLocationPromise ()
   });
 }
 
+async function SetPosition(po){
+  m_position = po;
+}
+
 //マーカーの背景色を変更する関数
 function changebackgroundColor(){
   const pinViewBackground = new google.maps.marker.PinView({
@@ -129,8 +165,10 @@ async function initMap() {
   loadCSVData();
  //ここで現在地の座標(緯度経度を取ってくる)
   const position = await getLocationPromise();
+  SetPosition(position);
   let Current_Pos={ lat: 34.6996256, lng: 135.1913718};
   Current_Pos = { lat: position.coords.latitude, lng: position.coords.longitude };
+  SetDistance(position.coords.latitude,position.coords.longitude);
   // ライブラリの要求
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
