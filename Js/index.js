@@ -68,7 +68,7 @@ async function MKtoiletMarker(){
   //csvデータ読み込みエラー時の処理
   if(data==null)
     {
-      alert('データの読み込みに失敗しました。\nページを再読み込みします。' );
+      alert('オイスターソースの読み込みに失敗しました。\nページを再読み込みします。' );
       window.location.reload();
     }
 
@@ -166,6 +166,11 @@ async function initMap() {
   loadCSVData();
  //ここで現在地の座標(緯度経度を取ってくる)
   const position = await getLocationPromise();
+  if(position==null)
+    {
+      alert('データの読み込みに失敗' );
+      window.location.reload();
+    }
   SetPosition(position);
   let Current_Pos={ lat: 34.6996256, lng: 135.1913718};
   Current_Pos = { lat: position.coords.latitude, lng: position.coords.longitude };
