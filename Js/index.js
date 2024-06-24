@@ -7,7 +7,7 @@ var TMarkerExpired=true;                    //トイレのマーカー存在フ�
 var TMarkers=[];                            //トイレのマーカーの配列
 var OpenWindow;
 var openFlg=false;
-var m_position;
+var m_position={};
 var Distance=[];
 
 //トグルスイッチ
@@ -38,25 +38,29 @@ async function toggleSearch(){
 }
 
 //現在地からの距離格納する関数
-function SetDistance(latA ,lngA){
-  // //const origin1 = new google.maps.LatLng(m_position.coords.latitude,m_position.coords.longitude);
-  // let origin1 = new google.maps.LatLng(latA,lngA);
-  // const origin2 = 'Now Position';
-  // const destinationA = 'Where';
-  // //const destinationB = new google.maps.LatLng(latA,lngA);
+async function SetDistance(latA ,lngA){
+  const { DistanceMatrixService } = await google.maps.importLibrary("routes");
 
-  // var service = new google.maps.DistanceMatrixService();
-  // service.getDistanceMatrix(
-  //   {
-  //     origins:[origin1,origin2],
-  //     destinations:[destinationA,destinationB],
-  //     travelMode: 'WALKING',
-  //   },callback);
+  let origin1 = {lat: m_position.coords.latitude,lng: m_position.coords.longitude};
+  const origin2 = 'Now Position';
+  const destinationA = 'Where';
+  let destinationB = {lat: latA, lng: lngA};
 
-  //   function callback(response,status){
-  //     // see parsing the results for 
-  //     //the basics of a callback function.
-  //   }
+  // console.log(origin1);
+  // console.log(origin2);
+  // console.log(destinationA);
+  // console.log(destinationB);
+
+  var distanceService = new google.maps.DistanceMatrixService();
+  const request=
+  {
+    origins:[origin1,origin2],
+    destinations:[destinationA,destinationB],
+    travelMode: 'WALKING',
+  };
+  distanceService.getDistanceMatrix(request).then((response)=>{
+    console.log(response);
+  })
 }
 
 //トイレのマーカーを打つ関数
@@ -120,6 +124,7 @@ async function MKtoiletMarker(){
       {
         map.panTo(marker_all);
       });
+      SetDistance(marker_all.lat,marker_all.lng)
     }
     TMarkerExpired=false;
   }
@@ -171,10 +176,9 @@ async function initMap() {
       alert('データの読み込みに失敗' );
       window.location.reload();
     }
-  SetPosition(position);
   let Current_Pos={ lat: 34.6996256, lng: 135.1913718};
   Current_Pos = { lat: position.coords.latitude, lng: position.coords.longitude };
-  SetDistance(position.coords.latitude,position.coords.longitude);
+  SetPosition(position);
   // ライブラリの要求
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
@@ -240,6 +244,7 @@ async function initMap() {
     });
 }
 
-initMap();
+ initMap();
 //memo===================================
-
+//右か左に最初からリストを出しておく。
+//スマホからの利便性向上
