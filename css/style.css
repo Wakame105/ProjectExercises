@@ -37,6 +37,19 @@ header{
     }
     .mapcontainar{
         padding: 10px;
+    }
+    .nearToiletContainar{
+        margin: 0;
+        padding: .6em 0 .4em;
         padding-top: 80px;
+    }
+    #search_tab{
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        width: 90%;
+        margin: auto;
+        padding: 10px;
+        list-style: none;
     }
 }

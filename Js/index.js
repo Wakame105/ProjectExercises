@@ -9,6 +9,7 @@ var OpenWindow;
 var openFlg=false;
 var m_position={};
 var Distance=[];
+var ToiletDistance=[];
 
 //トグルスイッチ
 const button = document.querySelector('#h-button');
@@ -244,7 +245,7 @@ async function initMap() {
     });
 }
 
- initMap();
+ await initMap();
 //memo===================================
 //右か左に最初からリストを出しておく。
 //スマホからの利便性向上
