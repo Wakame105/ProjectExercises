@@ -2,7 +2,7 @@
 
 .mapcontainar{
     padding: 30px;
-    padding-top: 100px;
+    padding-top: 0px;
     width: 100%;
 }
 #map{
@@ -28,6 +28,57 @@ header{
     background: rgba(195, 220, 197, 0.8);
     z-index: 100;
 }
+
+.nearToiletContainar{
+    margin: 0;
+    padding: .6em 0 .4em;
+    padding-top: 100px;
+}
+
+#search_tab{
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+    padding: 0;
+    list-style: none;
+}
+.search_tab li{
+    position: relative;
+    width: 49.6%;
+    padding: 1em .7em;
+    box-sizing: border-box;
+    background-color: rgb(199, 174, 224);
+    font-size: 114%;
+    cursor: pointer;
+}
+
+/* 最初のアイコンなどを変更 */
+.search_tab li:first-child::before{
+    right: inherit;
+    left: .8em;
+    background-color: blueviolet;
+}
+
+/* 前側には何もなし */
+.search_tab li::before{
+    content: "";
+}
+
+.search_tab li::after{
+    content: "";
+    position: absolute;
+    top:0;
+    bottom: 0;
+    right: .6em;
+    display: block;
+    width: .9em;
+    height: .5em;
+    margin: auto;
+    background: no-repeat center/110% url('../img/other/underTriangle.png');
+}
+
 @media screen and (max-width: 768px) {
     header{
         padding: 1em;
@@ -43,13 +94,7 @@ header{
         padding: .6em 0 .4em;
         padding-top: 80px;
     }
-    #search_tab{
-        display: flex;
-        align-items: stretch;
-        justify-content: space-between;
-        width: 90%;
-        margin: auto;
-        padding: 10px;
-        list-style: none;
-    }
+    /* #search_tab{
+        
+    } */
 }

@@ -31,6 +31,10 @@ function toggleDisplay(){
   MKtoiletMarker();
   }
 }
+//クリック処理をまとめたもの
+$('#tab_toilet').click(function(){
+  
+});
 
 //(制作中)検索ボタン
 async function toggleSearch(){
