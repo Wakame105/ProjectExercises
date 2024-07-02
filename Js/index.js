@@ -93,7 +93,9 @@ async function SetDistance(latA ,lngA){
     travelMode: 'WALKING',
   };
   distanceService.getDistanceMatrix(request).then((response)=>{
-    console.log(response);
+    //console.log(response);
+    //console.log(response.rows[0].elements[1].distance.value);
+    ToiletDistance.push(response.rows[0].elements[1].distance.value);
   })
 }
 
@@ -280,6 +282,7 @@ async function initMap() {
 
 
 await initMap();
+console.log(ToiletDistance)
 //memo===================================
 //右か左に最初からリストを出しておく。
 //スマホからの利便性向上
