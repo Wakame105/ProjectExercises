@@ -16,16 +16,15 @@
         <!-- トグルボタン -->
         <nav id="button_navi">
           <button id="h-button">トイレの位置の表示・非表示切り替え</button>
-          <button id="s-button">一番近いトイレの位置検索</button>
         </nav>
       </header>
       <div class="content">
         <div class="nearToiletContainar">
           <ul id="search_tab" class="search_tab">
             <li id="tab_toilet">トイレ</li>
-            <li id="tab_AFP">はんばいき</li>
+            <li id="tab_ATC">はんばいき</li>
           </ul>
-          <div class="search_tab-content">
+          <div class="search_tab_content" id="search_tab_content">
             <div id="search_toilet" class="search_toilet">
               <b class="ttl">トイレの位置を近い順で</b>
               <ul class="search_box-list">
@@ -37,7 +36,19 @@
                 </li>
               </ul>
             </div>
+            <div id="search_ATC" class="search_ATC">
+              <b class="ttl">自販機の位置を近い順で開発中</b>
+              <ul class="search_box-list">
+                <li>
+                  <button>あいうえお</button>
+                </li>
+                <li>
+                  <button>かきくけこ</button>
+                </li>
+              </ul>
+            </div>
           </div>
+           
         </div>
 
         <!-- マップ -->

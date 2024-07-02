@@ -14,8 +14,6 @@ var ToiletDistance=[];
 //トグルスイッチ
 const button = document.querySelector('#h-button');
 button.addEventListener('click',toggleDisplay);
-const s_button = document.querySelector("#s-button");
-s_button.addEventListener('click' ,toggleSearch);
 function toggleDisplay(){
   if(!TMarkerExpired)
   {
@@ -32,9 +30,40 @@ function toggleDisplay(){
   }
 }
 //クリック処理をまとめたもの
-$('#tab_toilet').click(function(){
-  
-});
+
+if($('#search_tab').length > 0)
+{
+  var tab_toilet = $('#tab_toilet');
+  var tab_ATC = $('#tab_ATC');
+  var search_toilet = $('#search_toilet');
+  var search_ATC = $('#search_ATC');
+  tabSelect(tab_toilet,tab_ATC,search_toilet,search_ATC);
+  tabSelect(tab_ATC,tab_toilet,search_ATC,search_toilet);
+}
+
+function tabSelect(tab,tab2,search,search2)
+{
+  tab.on('click',function(){
+    if(search.hasClass('active'))
+    {
+      search.slideUp('fast');
+      search.removeClass('active');
+      $(this).removeClass('active');
+    }
+    else
+    {
+      search.slideDown('fast');
+      search.addClass('active');
+      $(this).addClass('active');
+      if(search2.hasClass('active'))
+      {
+        search2.slideUp('fast');
+        search2.removeClass('active');
+        tab2.removeClass('active');
+      }
+    }
+  });
+}
 
 //(制作中)検索ボタン
 async function toggleSearch(){
@@ -249,7 +278,8 @@ async function initMap() {
     });
 }
 
- await initMap();
+
+await initMap();
 //memo===================================
 //右か左に最初からリストを出しておく。
 //スマホからの利便性向上

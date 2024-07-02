@@ -35,7 +35,7 @@ header{
     padding-top: 100px;
 }
 
-#search_tab{
+.search_tab{
     display: flex;
     align-items: stretch;
     justify-content: space-between;
@@ -77,6 +77,37 @@ header{
     height: .5em;
     margin: auto;
     background: no-repeat center/110% url('../img/other/underTriangle.png');
+}
+
+.search_tab_content{
+    position: relative;
+}
+
+.search_tab_content .search_toilet{
+    background-color: rgb(93, 93, 196);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 90%;
+    display: none;
+    margin: auto;
+    z-index: 100;
+    color: #fff;
+}
+
+.search_tab_content .search_ATC{
+
+    background-color: rgb(93, 93, 196);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: none;
+    width: 90%;
+    margin: auto;
+    z-index: 100;
+    color: #fff;
 }
 
 @media screen and (max-width: 768px) {
