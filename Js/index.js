@@ -8,8 +8,10 @@ var TMarkers=[];                            //トイレのマーカーの配列
 var OpenWindow;
 var openFlg=false;
 var m_position={};
-var Distance=[];
+var ToiletDistance_T=[];
 var ToiletDistance=[];
+var ToiletNumber=[];
+var ResponseList=[];
 
 //トグルスイッチ
 const button = document.querySelector('#h-button');
@@ -72,18 +74,13 @@ async function toggleSearch(){
 }
 
 //現在地からの距離格納する関数
-async function SetDistance(latA ,lngA){
+async function SetDistance(latA ,lngA,BNo){
   const { DistanceMatrixService } = await google.maps.importLibrary("routes");
 
   let origin1 = {lat: m_position.coords.latitude,lng: m_position.coords.longitude};
   const origin2 = 'Now Position';
   const destinationA = 'Where';
   let destinationB = {lat: latA, lng: lngA};
-
-  // console.log(origin1);
-  // console.log(origin2);
-  // console.log(destinationA);
-  // console.log(destinationB);
 
   var distanceService = new google.maps.DistanceMatrixService();
   const request=
@@ -95,8 +92,46 @@ async function SetDistance(latA ,lngA){
   distanceService.getDistanceMatrix(request).then((response)=>{
     //console.log(response);
     //console.log(response.rows[0].elements[1].distance.value);
-    ToiletDistance.push(response.rows[0].elements[1].distance.value);
+    let distance =  response.rows[0].elements[1].distance.value;
+    ResponseList.push({distance,BNo});
+    ToiletDistance.push(distance);
   })
+
+}
+
+async function PostSetDistance()
+{
+  console.log(ResponseList);
+  console.log(ToiletDistance);
+  let into;
+  let fl_struct;
+  let fl_num=[];
+  //一番大きいのを3回出す処理
+  for(let i=0;i<3;i++)
+    {
+      for(let j=0;j<ResponseList.length;j++)
+      { 
+        //そもそも中身がnullだった場合。
+        if(into==null){
+          //仮変数に代入 のち 構造体用変数にも代入
+          into=ToiletDistance[j];
+          fl_struct=ResponseList[j];
+        }
+        //もし同じ場合はスキップする
+        else if(fl_num[0]==ToiletDistance[j] || fl_num[1]==ToiletDistance[j]){
+          continue;
+        }
+        else if(into>ToiletDistance[j])
+        {
+          into=ToiletDistance[j];
+          fl_struct=ResponseList[j];
+        }
+      }
+      ToiletDistance_T[i]=fl_struct;
+      fl_num[i]=into;
+      into=null;
+    }
+    console.log(ToiletDistance_T);
 }
 
 //トイレのマーカーを打つ関数
@@ -120,6 +155,7 @@ async function MKtoiletMarker(){
     const BName = (data.slice(i,i+1).map(x=> `${x[1]}`).join(''));
     const BAdress = (data.slice(i,i+1).map(x=> `${x[4]}`).join(''));
     const BWhere = (data.slice(i,i+1).map(x=> `${x[6]}`).join(''));
+    var BNo = (data.slice(i,i+1).map(x=> `${x[0]}`).join(''));
     const marker3 = new AdvancedMarkerElement(
       {
       map:map,
@@ -160,10 +196,13 @@ async function MKtoiletMarker(){
       {
         map.panTo(marker_all);
       });
-      SetDistance(marker_all.lat,marker_all.lng)
+      SetDistance(marker_all.lat,marker_all.lng,BNo)
     }
     TMarkerExpired=false;
   }
+  setTimeout(()=>{
+    PostSetDistance();
+  },1000);
 }
 //ジオロケーションのオプション
 var options = {
@@ -263,9 +302,9 @@ async function initMap() {
     { // 結果
         if (status === google.maps.GeocoderStatus.OK) 
         { // ステータスがOKの場合
-        console.group('Success');
-        console.log(results[0].geometry.location);
-        console.log(status);
+        // console.group('Success');
+        // console.log(results[0].geometry.location);
+        // console.log(status);
         //マーカー
         const marker = new AdvancedMarkerView({
         map: map,
@@ -273,9 +312,9 @@ async function initMap() {
   });
         } else 
         { // 失敗した場合
-        console.group('Error');
-        console.log(results);
-        console.log(status);
+        // console.group('Error');
+        // console.log(results);
+        // console.log(status);
         }
     });
 }
