@@ -5,13 +5,13 @@ var infoWindow;                             //情報ウインドウ
 let data;                                   //csvの中のデータを取る用の変数                        
 var TMarkerExpired=true;                    //トイレのマーカー存在フラグ
 var TMarkers=[];                            //トイレのマーカーの配列
-var OpenWindow;
-var openFlg=false;
-var m_position={};
-var ToiletDistance_T=[];
-var ToiletDistance=[];
-var ToiletNumber=[];
+var OpenWindow;                             //情報ウインドウ
+var openFlg=false;                          //
+var m_position={};                          //自座標のワールド関数
+var ToiletDistance_T=[];                    //トイレへの距離の集まり
+var ToiletDistance=[];                      //トイレへの距離
 var ResponseList=[];
+var ToiletNameList=[];
 
 //トグルスイッチ
 const button = document.querySelector('#h-button');
@@ -74,7 +74,7 @@ async function toggleSearch(){
 }
 
 //現在地からの距離格納する関数
-async function SetDistance(latA ,lngA,BNo){
+async function SetDistance(latA ,lngA,BNo,BName){
   const { DistanceMatrixService } = await google.maps.importLibrary("routes");
 
   let origin1 = {lat: m_position.coords.latitude,lng: m_position.coords.longitude};
@@ -93,8 +93,9 @@ async function SetDistance(latA ,lngA,BNo){
     //console.log(response);
     //console.log(response.rows[0].elements[1].distance.value);
     let distance =  response.rows[0].elements[1].distance.value;
-    ResponseList.push({distance,BNo});
+    ResponseList.push({distance,BNo,BName});
     ToiletDistance.push(distance);
+    ToiletNameList.push(BName);
   })
 
 }
@@ -103,9 +104,11 @@ async function PostSetDistance()
 {
   console.log(ResponseList);
   console.log(ToiletDistance);
+  //=============================================================
   let into;
   let fl_struct;
   let fl_num=[];
+  let fl_name=[];
   //一番大きいのを3回出す処理
   for(let i=0;i<3;i++)
     {
@@ -125,6 +128,7 @@ async function PostSetDistance()
         {
           into=ToiletDistance[j];
           fl_struct=ResponseList[j];
+          fl_name[i]=ToiletNameList[j];
         }
       }
       ToiletDistance_T[i]=fl_struct;
@@ -132,6 +136,7 @@ async function PostSetDistance()
       into=null;
     }
     console.log(ToiletDistance_T);
+    $('#scrollbox_text').text(fl_name[0] + 'まで' + fl_num[0]+'m');
 }
 
 //トイレのマーカーを打つ関数
@@ -196,7 +201,8 @@ async function MKtoiletMarker(){
       {
         map.panTo(marker_all);
       });
-      SetDistance(marker_all.lat,marker_all.lng,BNo)
+      //距離を出す関数にトイレの数分入れる。
+      SetDistance(marker_all.lat,marker_all.lng,BNo,BName);
     }
     TMarkerExpired=false;
   }
@@ -308,7 +314,8 @@ async function initMap() {
         //マーカー
         const marker = new AdvancedMarkerView({
         map: map,
-        position: results[0].geometry.location
+        position: results[0].geometry.location,
+        title: "松本城",
   });
         } else 
         { // 失敗した場合

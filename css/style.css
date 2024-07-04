@@ -95,6 +95,9 @@ header{
     z-index: 100;
     color: #fff;
 }
+.search_tab_content .search_toilet .search_box-list {
+    list-style: none;
+}
 
 .search_tab_content .search_ATC{
 
