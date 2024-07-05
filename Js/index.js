@@ -214,7 +214,7 @@ async function MKtoiletMarker(){
   }
   setTimeout(()=>{
     PostSetDistance();
-  },500);
+  },1000);
 }
 //ジオロケーションのオプション
 var options = {
