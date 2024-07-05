@@ -1,5 +1,5 @@
 'use stript';
-let map;                                    //マップ
+var map;                                    //マップ
 var center={lat:34.682754, lng:135.159659}; //使うことない中心の定数
 var infoWindow;                             //情報ウインドウ
 let data;                                   //csvの中のデータを取る用の変数                        
@@ -136,9 +136,13 @@ async function PostSetDistance()
       into=null;
     }
     console.log(ToiletDistance_T);
-    $('#F_scrollbox_text').text(fl_name[0] + 'まで' + fl_num[0]+'m');
-    $('#S_scrollbox_text').text(fl_name[1] + 'まで' + fl_num[1]+'m');
-    $('#T_scrollbox_text').text(fl_name[2] + 'まで' + fl_num[2]+'m');
+    $('#TF_scrollbox_text').text(fl_name[0] + 'まで' + fl_num[0]+'m');
+    $('#TS_scrollbox_text').text(fl_name[1] + 'まで' + fl_num[1]+'m');
+    $('#TT_scrollbox_text').text(fl_name[2] + 'まで' + fl_num[2]+'m');
+
+    $("#TF_scrollbox_text").on("click",function(){
+      map.panTo(center);
+    });
 }
 
 //トイレのマーカーを打つ関数

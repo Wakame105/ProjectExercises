@@ -39,6 +39,13 @@ header{
     background-color: rgb(3, 3, 59);
     padding: 1em;
     border-bottom: solid 1px #3c096e;
+    cursor: pointer;
+}
+.nearVending{
+    background-color: rgb(3, 3, 59);
+    padding: 1em;
+    border-bottom: solid 1px #3c096e;
+    cursor: pointer;
 }
 
 .search_tab{
@@ -102,7 +109,7 @@ header{
     z-index: 100;
     color: #fff;
 }
-.search_tab_content .search_toilet .search_box-list {
+ .search_box-list {
     list-style: none;
     margin: 0;
     margin-top: 13.5vw;
@@ -120,6 +127,7 @@ header{
     display: none;
     width: 90%;
     margin: auto;
+    padding: .7em;
     z-index: 100;
     color: #fff;
 }
