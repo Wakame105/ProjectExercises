@@ -136,7 +136,9 @@ async function PostSetDistance()
       into=null;
     }
     console.log(ToiletDistance_T);
-    $('#scrollbox_text').text(fl_name[0] + 'まで' + fl_num[0]+'m');
+    $('#F_scrollbox_text').text(fl_name[0] + 'まで' + fl_num[0]+'m');
+    $('#S_scrollbox_text').text(fl_name[1] + 'まで' + fl_num[1]+'m');
+    $('#T_scrollbox_text').text(fl_name[2] + 'まで' + fl_num[2]+'m');
 }
 
 //トイレのマーカーを打つ関数
@@ -202,13 +204,13 @@ async function MKtoiletMarker(){
         map.panTo(marker_all);
       });
       //距離を出す関数にトイレの数分入れる。
-      SetDistance(marker_all.lat,marker_all.lng,BNo,BName);
+      SetDistance(marker_all.lat,marker_all.lng,BNo,BName+'（'+BWhere+'）');
     }
     TMarkerExpired=false;
   }
   setTimeout(()=>{
     PostSetDistance();
-  },1000);
+  },500);
 }
 //ジオロケーションのオプション
 var options = {

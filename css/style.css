@@ -35,6 +35,12 @@ header{
     padding-top: 100px;
 }
 
+.nearToilet{
+    background-color: rgb(3, 3, 59);
+    padding: 1em;
+    border-bottom: solid 1px #3c096e;
+}
+
 .search_tab{
     display: flex;
     align-items: stretch;
@@ -92,11 +98,16 @@ header{
     width: 90%;
     display: none;
     margin: auto;
+    padding: .7em;
     z-index: 100;
     color: #fff;
 }
 .search_tab_content .search_toilet .search_box-list {
     list-style: none;
+    margin: 0;
+    margin-top: 13.5vw;
+    padding: 0;
+    /* overflow: scroll; */
 }
 
 .search_tab_content .search_ATC{
@@ -111,6 +122,17 @@ header{
     margin: auto;
     z-index: 100;
     color: #fff;
+}
+
+.ttl{
+    position: absolute;
+    top: 0;
+    left:0;
+    right: 0;
+    display: block;
+    padding: 1em 1.5em;
+    margin: auto;
+    font-size: 4.75vw;
 }
 
 @media screen and (max-width: 768px) {
