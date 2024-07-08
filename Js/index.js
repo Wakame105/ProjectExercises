@@ -100,6 +100,14 @@ async function SetDistance(latA ,lngA,BNo,BName){
 
 }
 
+function Err_PSD()
+{
+  alert('ない。なにも。')
+
+ setTimeout(()=>{
+    PostSetDistance();
+  },500);
+}
 async function PostSetDistance()
 {
   console.log(ResponseList);
@@ -132,10 +140,14 @@ async function PostSetDistance()
         }
       }
       ToiletDistance_T[i]=fl_struct;
+      console.log(fl_struct);
       fl_num[i]=into;
       into=null;
     }
     console.log(ToiletDistance_T);
+    console.log(fl_name[0]);
+    console.log(fl_name[1]);
+    console.log(fl_name[2]);
     $('#TF_scrollbox_text').text(fl_name[0] + 'まで' + fl_num[0]+'m');
     $('#TS_scrollbox_text').text(fl_name[1] + 'まで' + fl_num[1]+'m');
     $('#TT_scrollbox_text').text(fl_name[2] + 'まで' + fl_num[2]+'m');
@@ -214,7 +226,7 @@ async function MKtoiletMarker(){
   }
   setTimeout(()=>{
     PostSetDistance();
-  },1000);
+  },500);
 }
 //ジオロケーションのオプション
 var options = {
@@ -250,12 +262,11 @@ async function loadCSVData(){
   const text = await response.text();
   data = text.trim().split('\n')
     .map(line => line.split(',').map(x => x.trim()));
+    let a;
 }
 
 //ここから下がマップの処理
 async function initMap() {
-  
-  loadCSVData();
  //ここで現在地の座標(緯度経度を取ってくる)
   const position = await getLocationPromise();
   if(position==null)
@@ -332,9 +343,10 @@ async function initMap() {
     });
 }
 
-
-await initMap();
-console.log(ToiletDistance)
+loadCSVData();
+setTimeout(()=>{
+  initMap();
+},100);
 //memo===================================
 //右か左に最初からリストを出しておく。
 //スマホからの利便性向上
