@@ -12,6 +12,7 @@ var ToiletDistance_T=[];                    //トイレへの距離の集まり
 var ToiletDistance=[];                      //トイレへの距離
 var ResponseList=[];
 var ToiletNameList=[];
+var ToiletLatLngList=[];
 
 //トグルスイッチ
 const button = document.querySelector('#h-button');
@@ -70,17 +71,16 @@ function tabSelect(tab,tab2,search,search2)
 //(制作中)検索ボタン
 async function toggleSearch(){
   
-  
 }
 
 //現在地からの距離格納する関数
-async function SetDistance(latA ,lngA,BNo,BName){
+async function SetDistance(lat ,lng,BNo,BName){
   const { DistanceMatrixService } = await google.maps.importLibrary("routes");
 
   let origin1 = {lat: m_position.coords.latitude,lng: m_position.coords.longitude};
   const origin2 = 'Now Position';
   const destinationA = 'Where';
-  let destinationB = {lat: latA, lng: lngA};
+  let destinationB = {lat: lat, lng: lng};
 
   var distanceService = new google.maps.DistanceMatrixService();
   const request=
@@ -96,6 +96,7 @@ async function SetDistance(latA ,lngA,BNo,BName){
     ResponseList.push({distance,BNo,BName});
     ToiletDistance.push(distance);
     ToiletNameList.push(BName);
+    ToiletLatLngList.push({lat,lng});
   })
 
 }
@@ -110,13 +111,13 @@ function Err_PSD()
 }
 async function PostSetDistance()
 {
-  console.log(ResponseList);
   console.log(ToiletDistance);
   //=============================================================
   let into;
   let fl_struct;
   let fl_num=[];
   let fl_name=[];
+  let fl_LatLng=[];
   //一番大きいのを3回出す処理
   for(let i=0;i<3;i++)
     {
@@ -137,6 +138,7 @@ async function PostSetDistance()
           into=ToiletDistance[j];
           fl_struct=ResponseList[j];
           fl_name[i]=ToiletNameList[j];
+          fl_LatLng[i] = ToiletLatLngList[j]; 
         }
       }
       ToiletDistance_T[i]=fl_struct;
@@ -153,8 +155,15 @@ async function PostSetDistance()
     $('#TT_scrollbox_text').text(fl_name[2] + 'まで' + fl_num[2]+'m');
 
     $("#TF_scrollbox_text").on("click",function(){
-      map.panTo(center);
+      map.panTo(fl_LatLng[0]);
     });
+    $("#TS_scrollbox_text").on("click",function(){
+      map.panTo(fl_LatLng[1]);
+    });
+    $("#TT_scrollbox_text").on("click",function(){
+      map.panTo(fl_LatLng[2]);
+    });
+    
 }
 
 //トイレのマーカーを打つ関数
@@ -224,6 +233,7 @@ async function MKtoiletMarker(){
     }
     TMarkerExpired=false;
   }
+  console.log(ResponseList);
   setTimeout(()=>{
     PostSetDistance();
   },500);
