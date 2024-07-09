@@ -73,32 +73,55 @@ async function toggleSearch(){
   
 }
 
+function haversine_distance(mk1, mk2) {
+  var R = 6371.0710; // Radius of the Earth in miles
+  var rlat1 = mk1.lat * (Math.PI/180);
+   // Convert degrees to radians
+  var rlat2 = mk2.lat * (Math.PI/180);
+   // Convert degrees to radians
+  var difflat = rlat2-rlat1; // Radian difference (latitudes)
+  var difflon = (mk2.lng-mk1.lng) 
+              * (Math.PI/180); // Radian difference (longitudes)
+
+  var d = 2 * R 
+  * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)
+  +Math.cos(rlat1)*Math.cos(rlat2)
+  *Math.sin(difflon/2)*Math.sin(difflon/2)));
+  return d;
+}
+
 //現在地からの距離格納する関数
 async function SetDistance(lat ,lng,BNo,BName){
-  const { DistanceMatrixService } = await google.maps.importLibrary("routes");
+  // const { DistanceMatrixService } = await google.maps.importLibrary("routes");
 
-  let origin1 = {lat: m_position.coords.latitude,lng: m_position.coords.longitude};
-  const origin2 = 'Now Position';
-  const destinationA = 'Where';
-  let destinationB = {lat: lat, lng: lng};
+   let origin1 = {lat: m_position.coords.latitude,lng: m_position.coords.longitude};
+  // const origin2 = 'Now Position';
+  // const destinationA = 'Where';
+  // let destinationB = {lat: lat, lng: lng};
 
-  var distanceService = new google.maps.DistanceMatrixService();
-  const request=
-  {
-    origins:[origin1,origin2],
-    destinations:[destinationA,destinationB],
-    travelMode: 'WALKING',
-  };
-  distanceService.getDistanceMatrix(request).then((response)=>{
-    //console.log(response);
-    //console.log(response.rows[0].elements[1].distance.value);
-    let distance =  response.rows[0].elements[1].distance.value;
-    ResponseList.push({distance,BNo,BName});
-    ToiletDistance.push(distance);
-    ToiletNameList.push(BName);
-    ToiletLatLngList.push({lat,lng});
-  })
-
+  // var distanceService = new google.maps.DistanceMatrixService();
+  // const request=
+  // {
+  //   origins:[origin1,origin2],
+  //   destinations:[destinationA,destinationB],
+  //   travelMode: 'WALKING',
+  // };
+  // distanceService.getDistanceMatrix(request).then((response)=>{
+  //   //console.log(response);
+  //   //console.log(response.rows[0].elements[1].distance.value);
+  //   let distance =  response.rows[0].elements[1].distance.value;
+  //   ResponseList.push({distance,BNo,BName});
+  //   ToiletDistance.push(distance);
+  //   ToiletNameList.push(BName);
+  //   ToiletLatLngList.push({lat,lng});
+  // })
+  let distance = haversine_distance(origin1,{lat,lng});
+  distance = distance * 1000;
+  distance = Math.round(distance);
+  ResponseList.push({distance,BNo,BName});
+  ToiletDistance.push(distance);
+  ToiletNameList.push(BName);
+  ToiletLatLngList.push({lat,lng});
 }
 
 function Err_PSD()
@@ -316,7 +339,7 @@ async function initMap() {
   MKtoiletMarker();
     //情報窓をクリックしたら出す
   let MInfoWindow = new google.maps.InfoWindow({
-    content: '<div class="sample">TAM 三宮</div>'
+    content: '<div class="sample">現在地</div>'
   });
   m_m.addListener('gmp-click', function(){
     MInfoWindow.open(map,m_m);
