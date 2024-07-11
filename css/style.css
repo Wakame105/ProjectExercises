@@ -140,7 +140,7 @@ header{
     display: block;
     padding: 1em 1.5em;
     margin: auto;
-    font-size: 4.75vw;
+    font-size: 3.75vw;
 }
 
 @media screen and (max-width: 768px) {

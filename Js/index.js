@@ -8,7 +8,6 @@ var TMarkers=[];                            //トイレのマーカーの配列
 var OpenWindow;                             //情報ウインドウ
 var openFlg=false;                          //
 var m_position={};                          //自座標のワールド関数
-var ToiletDistance_T=[];                    //トイレへの距離の集まり
 var ToiletDistance=[];                      //トイレへの距離
 var ResponseList=[];
 var ToiletNameList=[];
@@ -137,7 +136,6 @@ async function PostSetDistance()
   console.log(ToiletDistance);
   //=============================================================
   let into;
-  let fl_struct;
   let fl_num=[];
   let fl_name=[];
   let fl_LatLng=[];
@@ -148,35 +146,29 @@ async function PostSetDistance()
       { 
         //そもそも中身がnullだった場合。
         if(into==null){
-          //仮変数に代入 のち 構造体用変数にも代入
+          //仮変数 into に代入 
           into=ToiletDistance[j];
-          fl_struct=ResponseList[j];
         }
         //もし同じ場合はスキップする
         else if(fl_num[0]==ToiletDistance[j] || fl_num[1]==ToiletDistance[j]){
           continue;
         }
+        //そして、仮変数に入っているよりも近かった(小さい)場合入れ替える
         else if(into>ToiletDistance[j])
         {
           into=ToiletDistance[j];
-          fl_struct=ResponseList[j];
           fl_name[i]=ToiletNameList[j];
           fl_LatLng[i] = ToiletLatLngList[j]; 
         }
       }
-      ToiletDistance_T[i]=fl_struct;
-      console.log(fl_struct);
       fl_num[i]=into;
       into=null;
     }
-    console.log(ToiletDistance_T);
-    console.log(fl_name[0]);
-    console.log(fl_name[1]);
-    console.log(fl_name[2]);
+    //トイレを近い順に並べたところを表示する
     $('#TF_scrollbox_text').text(fl_name[0] + 'まで' + fl_num[0]+'m');
     $('#TS_scrollbox_text').text(fl_name[1] + 'まで' + fl_num[1]+'m');
     $('#TT_scrollbox_text').text(fl_name[2] + 'まで' + fl_num[2]+'m');
-
+    //トイレを近い順に並べた所をクリックするとそこに飛ぶ
     $("#TF_scrollbox_text").on("click",function(){
       map.panTo(fl_LatLng[0]);
     });
@@ -186,7 +178,6 @@ async function PostSetDistance()
     $("#TT_scrollbox_text").on("click",function(){
       map.panTo(fl_LatLng[2]);
     });
-    
 }
 
 //トイレのマーカーを打つ関数
@@ -222,6 +213,7 @@ async function MKtoiletMarker(){
       TMarkers.push(marker3);
 
       //情報ウィンド表示
+
       const info = new google.maps.InfoWindow({
         content: BName+'（'+BWhere+'）',
       });
