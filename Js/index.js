@@ -213,9 +213,10 @@ async function MKtoiletMarker(){
       TMarkers.push(marker3);
 
       //情報ウィンド表示
-
+      var offset = new google.maps.Size(-10,6);
       const info = new google.maps.InfoWindow({
         content: BName+'（'+BWhere+'）',
+        pixelOffset: offset,
       });
       //マーカーをクリックして情報ウインドが出ていなければ表示し、
       //出ていればさっきまでのを閉じて新しく表示するか、閉じるか判別する処理
@@ -227,6 +228,7 @@ async function MKtoiletMarker(){
           info.open(map,marker3);
           }
         else{
+          //  今開いているウインドウかどうか確認して、違がければ今のを閉じて、他のを開く
            if(OpenWindow!=info){
             OpenWindow.close();
             OpenWindow=info;
