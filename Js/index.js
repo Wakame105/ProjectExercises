@@ -192,7 +192,7 @@ async function MKtoiletMarker(){
       alert('オイスターソースの読み込みに失敗しました。\nページを再読み込みします。' );
       window.location.reload();
     }
-
+    
   for(let i=1;i<data.length;i++)
     {
     const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
@@ -207,7 +207,6 @@ async function MKtoiletMarker(){
       map:map,
       position: marker_all,
       title: BName,
-      
       //icon:'P_20240420_080129.jpg'
       });
       TMarkers.push(marker3);
@@ -258,7 +257,7 @@ async function MKtoiletMarker(){
 //ジオロケーションのオプション
 var options = {
   enableHighAccuracy: true,
-  timeout: 1000,
+  timeout: 10000,
   maximumAge: 0
 };
 
@@ -266,10 +265,12 @@ var options = {
 function getLocationPromise ()
 {
   return new Promise((resolve, reject) => {
-      navigator.geolocation.watchPosition(resolve, reject, options);
+      navigator.geolocation.watchPosition(resolve, GetPositionError, options);
   });
 }
-
+function GetPositionError(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
 async function SetPosition(po){
   m_position = po;
 }
