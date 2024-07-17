@@ -145,7 +145,7 @@ header{
 
 @media screen and (max-width: 768px) {
     header{
-        padding: 1em;
+        padding: 0.5em;
     }
     header h3{
         font-size: 10px;

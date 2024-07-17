@@ -184,31 +184,30 @@ async function PostSetDistance()
 async function MKtoiletMarker(){
   if(TMarkerExpired)
   {
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-  //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
-  //csvデータ読み込みエラー時の処理
-  if(data==null)
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    //==CSVから読み取ったデータを一個ずつマーカーを打っていく==
+    //csvデータ読み込みエラー時の処理
+    if(data==null)
     {
       alert('オイスターソースの読み込みに失敗しました。\nページを再読み込みします。' );
       window.location.reload();
     }
-    
-  for(let i=1;i<data.length;i++)
+      
+    for(let i=1;i<data.length;i++)
     {
-    const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
-    const marker_lng = Number(data.slice(i,i+1).map(x=> `${x[3]}`).join(''));
-    const marker_all = { lat: marker_lat, lng: marker_lng }; 
-    const BName = (data.slice(i,i+1).map(x=> `${x[1]}`).join(''));
-    const BAdress = (data.slice(i,i+1).map(x=> `${x[4]}`).join(''));
-    const BWhere = (data.slice(i,i+1).map(x=> `${x[6]}`).join(''));
-    var BNo = (data.slice(i,i+1).map(x=> `${x[0]}`).join(''));
-    const marker3 = new AdvancedMarkerElement(
-      {
-      map:map,
-      position: marker_all,
-      title: BName,
-      //icon:'P_20240420_080129.jpg'
-      });
+      const marker_lat = Number(data.slice(i,i+1).map(x=> `${x[2]}`).join(''));
+      const marker_lng = Number(data.slice(i,i+1).map(x=> `${x[3]}`).join(''));
+      const marker_all = { lat: marker_lat, lng: marker_lng }; 
+      const BName = (data.slice(i,i+1).map(x=> `${x[1]}`).join(''));
+      const BAdress = (data.slice(i,i+1).map(x=> `${x[4]}`).join(''));
+      const BWhere = (data.slice(i,i+1).map(x=> `${x[6]}`).join(''));
+      var BNo = (data.slice(i,i+1).map(x=> `${x[0]}`).join(''));
+      const marker3 = new AdvancedMarkerElement({
+        map:map,
+        position: marker_all,
+        title: BName,
+        //icon:'P_20240420_080129.jpg'
+        });
       TMarkers.push(marker3);
 
       //情報ウィンド表示
@@ -228,7 +227,7 @@ async function MKtoiletMarker(){
           }
         else{
           //  今開いているウインドウかどうか確認して、違がければ今のを閉じて、他のを開く
-           if(OpenWindow!=info){
+          if(OpenWindow!=info){
             OpenWindow.close();
             OpenWindow=info;
             openFlg=true;
@@ -239,7 +238,7 @@ async function MKtoiletMarker(){
             info.close();
             }
         }
-      });
+        });
       info.addListener('visible',function()
       {
         map.panTo(marker_all);
