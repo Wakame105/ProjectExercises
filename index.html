@@ -13,11 +13,9 @@
       <header>
         <h3>最寄りのトイレを探すサイト</h3>
         <!-- トグルボタン -->
-         
-          
           <nav id="button_navi">
             <div id="nav">
-              <input type="text" id="k-text" name="k-text" required minlength="4">
+              <input type="text" id="k-text" name="k-text" required minlength="4" placeholder="検索したい地域名を入力してください。">
               <button id="k-button">検索</button>
             </div>
             <button id="h-button">トイレの位置の表示・非表示切り替え</button>
@@ -33,6 +31,9 @@
           <div class="search_tab_content" id="search_tab_content">
             <div id="search_toilet" class="search_toilet">
               <b class="ttl">トイレの位置を近い順で</b>
+              <p class="S_scrollbox_after">
+                なおこの距離は直線距離です。
+              </p>
               <ul class="search_box-list">
                 <li class="nearToilet">
                   <div class="scrollbox_frame">

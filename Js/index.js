@@ -32,6 +32,23 @@ function toggleDisplay(){
   }
 }
 //クリック処理をまとめたもの
+const button3 = document.querySelector('#k-button');
+button3.addEventListener('click',clickbutton);
+function clickbutton(){
+  const text_area = $('#k-text').val();
+  console.log(text_area);
+  Geocoding(text_area);
+}
+const Stext_form = document.getElementById("k-text");
+Stext_form.addEventListener("keydown",(e) =>{
+  if(e.key === "Enter"){
+    const btn_search = document.getElementById("k-button");
+    btn_search.dispatchEvent(new PointerEvent('click'));// clickイベントを発生させて、送り込む
+    e.preventDefault(); // Enterキー入力を他に伝搬させないために
+  }
+  return false;
+});
+
 
 if($('#search_tab').length > 0)
 {
@@ -41,6 +58,32 @@ if($('#search_tab').length > 0)
   var search_ATC = $('#search_ATC');
   tabSelect(tab_toilet,tab_ATC,search_toilet,search_ATC);
   tabSelect(tab_ATC,tab_toilet,search_ATC,search_toilet);
+}
+
+async function Geocoding(address)
+{
+  const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+  var geocoder;
+  geocoder = new google.maps.Geocoder();
+
+  geocoder.geocode(
+    {
+      'address': address // ここに住所を入れると...?
+    }
+    , function(results, status) 
+    { // 結果
+        if (status === google.maps.GeocoderStatus.OK) 
+        { // ステータスがOKの場合
+          const latlng=results[0].geometry.location;
+          map.panTo(latlng);
+        }
+  
+         else 
+        { // 失敗した場合
+         console.group('Error');
+         alert('検索結果なし。');
+        }
+    });
 }
 
 function tabSelect(tab,tab2,search,search2)
