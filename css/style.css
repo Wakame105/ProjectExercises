@@ -36,9 +36,12 @@ header nav{
     padding-right: 4em;
     display: contents;
 }
+header nav #nav{
+    
+}
 
 header nav input{
-    width:400px;
+    width:200%;
     height: 40px;
 }
 
@@ -52,7 +55,7 @@ header nav input{
     background-color: rgb(3, 3, 59);
     padding: 1em;
     border-bottom: solid 1px #3c096e;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 .nearVending{
     background-color: rgb(3, 3, 59);
@@ -65,10 +68,11 @@ header nav input{
     display: flex;
     align-items: stretch;
     justify-content: space-between;
-    width: 90%;
+    width: 80%;
     margin: auto;
     padding: 0;
     list-style: none;
+    cursor: pointer;
 }
 .search_tab li{
     position: relative;
@@ -77,12 +81,6 @@ header nav input{
     box-sizing: border-box;
     background-color: rgb(199, 174, 224);
     font-size: 114%;
-}
-.F_scrollbox_text{
-    cursor: pointer;
-}
-.S_scrollbox_text{
-    cursor: pointer;
 }
 .T_scrollbox_text{
     cursor: pointer;
@@ -122,7 +120,7 @@ header nav input{
     top: 0;
     left: 0;
     right: 0;
-    width: 90%;
+    width: 80%;
     display: none;
     margin: auto;
     padding: .7em;
@@ -136,11 +134,6 @@ header nav input{
     padding: 0;
     /* overflow: scroll; */
 }
-.scrollbox_after{
-    margin: 0;
-    text-align: right;
-    font-size: 80%;
-}
 
 .search_tab_content .search_ATC{
 
@@ -150,7 +143,7 @@ header nav input{
     left: 0;
     right: 0;
     display: none;
-    width: 90%;
+    width: 80%;
     margin: auto;
     padding: .7em;
     z-index: 100;
@@ -163,9 +156,25 @@ header nav input{
     left:0;
     right: 0;
     display: block;
+    text-align: center;
     padding: 0.5em 1em;
+    padding-top: 5vh;
     margin: auto;
     font-size: 2.75vw;
+}
+.ttl_after{
+    position:absolute;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin: 0;
+    font-size: 80%;
+    padding: 5px;
+}
+#search_toilet_textarea{
+    margin: 0;
+    justify-content: space-between;
 }
 
 @media screen and (max-width: 768px) {
@@ -188,7 +197,15 @@ header nav input{
         display: contents;
     }
     header nav input{
-        width:80%;
+        width:100%;
+    }
+    .ttl{
+        padding-top: 3vh;
+        font-size: 3vw;
+    }
+    .ttl_after{
+        font-size: 50%;
+        top: 0;
     }
     /* #search_tab{
         
