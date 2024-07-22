@@ -38,10 +38,21 @@ header nav{
 }
 
 header nav input{
-    width:200%;
+    width:400%;
     height: 40px;
 }
 
+
+#nav{
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+#k-button{
+    height: 40px;
+    font-size: 1.5vh;
+    width: 80%;
+}
 .nearToiletContainar{
     margin: 0;
     padding: .6em 0 .4em;
@@ -203,7 +214,18 @@ header nav input{
         font-size: 50%;
         top: 0;
     }
+    #k-button{
+        height: 40px;
+        font-size: 1.5vh;
+        width: 40%;
+    }
     /* #search_tab{
         
     } */
+}
+@media screen and (max-width: 650px) {
+    #h-button{
+        width: 30%;
+        font-size: 2.7vw;
+    }
 }

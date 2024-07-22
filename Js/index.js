@@ -49,14 +49,12 @@ button3.addEventListener('click',clickbutton);
           const latlng=results[0].geometry.location;
           map.panTo(latlng);
         }
-  
          else 
         { // 失敗した場合
          console.group('Error');
          alert('検索結果なし。');
         }
     });
-
 
 }
 const Stext_form = document.getElementById("k-text");
@@ -81,7 +79,7 @@ if($('#search_tab').length > 0)
   tabSelect(tab_ATC,tab_toilet,search_ATC,search_toilet);
 }
 
-async function Geocoding(address,flg)
+function Geocoding(address,flg)
 {
   var geocoder1;
   geocoder1 = new google.maps.Geocoder();
@@ -346,6 +344,7 @@ function getLocationPromise ()
 }
 function GetPositionError(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
+  alert("ずびばぜん");
 }
 async function SetPosition(po){
   m_position = po;
