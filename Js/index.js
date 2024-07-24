@@ -8,8 +8,6 @@ var TMarkers=[];                            //トイレのマーカーのワー�
 var OpenWindow;                             //現在の情報ウインドウ変数
 var openFlg=false;                          //情報ウインドウが開いているかのフラグ
 var m_position={};                          //自座標のワールド関数
-var ToiletDistance=[];                      //トイレへの距離配列
-var ToiletNameList=[];                      //トイレの名前だけの配列
 var ToiletLatLngList=[];                    //トイレの緯度経度だけの配列
 var ResponseList=[];                        //トイレへの距離・名称・緯度経度等が纏めて入っている
 //トグルスイッチ  トイレの表示非表示ボタンを押したら(クリック)情報ウインドウの生存フラグを確認し、有れば消す。無ければ生成する。
@@ -34,20 +32,22 @@ function toggleDisplay(){
 //検索ボタンを押すと(クリック)テキストの内容を取り、ジオコーディング(と夜)に掛ける
 const button3 = document.querySelector('#k-button');
 button3.addEventListener('click',clickbutton);
- function clickbutton(){
+function clickbutton(){
   const text_area = $('#k-text').val();
-  //SetPosition();
  
   let geocoder1;
-  geocoder1 = new google.maps.Geocoder();
+  geocoder1 = new google.maps.Geocoder();             //ジオコーディング型を読んで
 
-  geocoder1.geocode( {'address': text_area }
+  geocoder1.geocode( {'address': text_area }          //テキストエリアにある文字列で検索した結果があったらOKなかったらアラートを設定
     , function(results, status) 
     { // 結果
         if (status === google.maps.GeocoderStatus.OK) 
         { // ステータスがOKの場合
           const latlng=results[0].geometry.location;
+          const ConvertLatLng = ConvertLatLngToObject(latlng);
           map.panTo(latlng);
+          SetPosition(ConvertLatLng);
+          ReSetDistance();
         }
          else 
         { // 失敗した場合
@@ -55,9 +55,12 @@ button3.addEventListener('click',clickbutton);
          alert('検索結果なし。');
         }
     });
-
 }
-const Stext_form = document.getElementById("k-text");
+function ConvertLatLngToObject(latlng){
+  return {lat: latlng.lat(),lng:latlng.lng()};
+}
+
+const Stext_form = document.getElementById("k-text");//入力フォームをエンターキーで検索するための関数
 Stext_form.addEventListener("keydown",(e) =>{
   if(e.key === "Enter"){
     const btn_search = document.getElementById("k-button");
@@ -68,7 +71,7 @@ Stext_form.addEventListener("keydown",(e) =>{
 });
 
 
-if($('#search_tab').length > 0)
+if($('#search_tab').length > 0)//「トイレ」と「はんばいき」の押したら下がってくる処理群
 {
   var tab_toilet = $('#tab_toilet');
   var tab_ATC = $('#tab_ATC');
@@ -79,7 +82,7 @@ if($('#search_tab').length > 0)
   tabSelect(tab_ATC,tab_toilet,search_ATC,search_toilet);
 }
 
-function Geocoding(address,flg)
+function Geocoding(address,flg) //返り値がうまくいかないため使えない関数
 {
   var geocoder1;
   geocoder1 = new google.maps.Geocoder();
@@ -91,7 +94,11 @@ function Geocoding(address,flg)
         { // ステータスがOKの場合
           const latlng=results[0].geometry.location;
           if(flg){map.panTo(latlng);}
-          return latlng;
+          return new Promise((resolve)=> {
+            setTimeout(() => {
+              resolve(latlng);
+            }, 10);
+          });
         }
   
          else 
@@ -104,7 +111,7 @@ function Geocoding(address,flg)
   
 }
 
-function tabSelect(tab,tab2,search,search2,tab3)
+function tabSelect(tab,tab2,search,search2,tab3) //タブセレクト(名前通り)
 {
   tab.on('click',function(){
     if(search.hasClass('active'))
@@ -137,11 +144,6 @@ function tabSelect(tab,tab2,search,search2,tab3)
   }
 }
 
-//(制作中)検索ボタン
-async function toggleSearch(){
-  
-}
-
 function haversine_distance(mk1, mk2) {
   var R = 6371.0710; // Radius of the Earth in miles
   var rlat1 = mk1.lat * (Math.PI/180);
@@ -163,8 +165,9 @@ function haversine_distance(mk1, mk2) {
 async function SetDistance(lat ,lng,BNo,BName){
   // const { DistanceMatrixService } = await google.maps.importLibrary("routes");
 
-   let origin1 = {lat: m_position.coords.latitude,lng: m_position.coords.longitude};
-  /*  //DistanceMatrixAPIを使用していた名残。ものすごくお金がかかっていたので使用停止2024/7/9。
+   let origin1 = {lat: m_position.lat,lng: m_position.lng};
+  //DistanceMatrixAPIを使用していた名残。ものすごくお金がかかっていたので使用停止2024/7/9。  
+  /*
   const origin2 = 'Now Position';
   const destinationA = 'Where';
   let destinationB = {lat: lat, lng: lng};
@@ -181,34 +184,35 @@ async function SetDistance(lat ,lng,BNo,BName){
     //console.log(response.rows[0].elements[1].distance.value);
     let distance =  response.rows[0].elements[1].distance.value;
     ResponseList.push({distance,BNo,BName});
-    ToiletDistance.push(distance);
-    ToiletNameList.push(BName);
     ToiletLatLngList.push({lat,lng});
   })*/
-  let distance = haversine_distance(origin1,{lat,lng});
+  let distance = haversine_distance(origin1,{lat:lat,lng:lng});
   distance = distance * 1000;
   distance = Math.round(distance);
+
   ResponseList.push({distance,BNo,BName});
-  ToiletDistance.push(distance);
-  ToiletNameList.push(BName);
-  ToiletLatLngList.push({lat,lng});
+  ToiletLatLngList.push({lat:lat,lng:lng});
 }
 //再計算用関数
-async function ReSetDistance(lat,lng){
-  
-}
-
-function Err_PSD()
-{
-  alert('ない。なにも。')
-
- setTimeout(()=>{
+async function ReSetDistance(){
+  // ResponseList=null;
+  console.log(ToiletLatLngList);
+  for(let i=0;i<data.length-1;i++)
+  {
+    const origin1 = {lat: m_position.lat,lng: m_position.lng};
+    let distance = haversine_distance(origin1,{lat:ToiletLatLngList[i].lat,lng:ToiletLatLngList[i].lng});
+    distance = distance * 1000;
+    distance = Math.round(distance);
+    ResponseList[i].distance=distance;
+  }
+  console.log(ResponseList);
+  setTimeout(()=>{
     PostSetDistance();
-  },500);
+  },100);
 }
+
 async function PostSetDistance()
 {
-  console.log(ToiletDistance);
   //=============================================================
   let into;
   let fl_num=[];
@@ -219,20 +223,21 @@ async function PostSetDistance()
     {
       for(let j=0;j<ResponseList.length;j++)
       { 
+        let distance = ResponseList[j].distance;
         //そもそも中身がnullだった場合。
         if(into==null){
           //仮変数 into に代入 
-          into=ToiletDistance[j];
+          into = distance;
         }
         //もし同じ場合はスキップする
-        else if(fl_num[0]==ToiletDistance[j] || fl_num[1]==ToiletDistance[j]){
+        else if(fl_num[0]==distance || fl_num[1]==distance){
           continue;
         }
         //そして、仮変数に入っているよりも近かった(小さい)場合入れ替える
-        else if(into>ToiletDistance[j])
+        else if(into>distance)
         {
-          into=ToiletDistance[j];
-          fl_name[i]=ToiletNameList[j];
+          into=distance;
+          fl_name[i]=ResponseList[j].BName;
           fl_LatLng[i] = ToiletLatLngList[j]; 
         }
       }
@@ -335,7 +340,7 @@ var options = {
   maximumAge: 0
 };
 
-//現在位置を取ってくる関数
+//現在位置を取ってくる関数とそのエラー関数
 function getLocationPromise ()
 {
   return new Promise((resolve, reject) => {
@@ -344,10 +349,14 @@ function getLocationPromise ()
 }
 function GetPositionError(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
-  alert("ずびばぜん");
+  alert("現在地の取得に失敗しました。\nそのまましばらくお待ち頂くか、再度時間をおいてお試しください。");
 }
 async function SetPosition(po){
-  m_position = po;
+  m_position = {
+    lat: po.lat,
+    lng: po.lng
+  };
+  console.log(m_position);
 }
 
 //マーカーの背景色を変更する関数
@@ -371,7 +380,7 @@ async function loadCSVData(){
 //ここから下がマップの処理
 async function initMap() {
  //ここで現在地の座標(緯度経度を取ってくる)
-  const position = await getLocationPromise();
+  let position = await getLocationPromise();
   if(position==null)
     {
       alert('データの読み込みに失敗' );
@@ -379,7 +388,7 @@ async function initMap() {
     }
   let Current_Pos={ lat: 34.6996256, lng: 135.1913718};
   Current_Pos = { lat: position.coords.latitude, lng: position.coords.longitude };
-  SetPosition(position);
+  SetPosition(Current_Pos);
   // ライブラリの要求
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");

@@ -47,6 +47,7 @@ header nav input{
     display: flex;
     justify-content: space-between;
     width: 50%;
+    margin: 2px;
 }
 #k-button{
     height: 40px;
