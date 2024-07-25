@@ -32,10 +32,12 @@ function toggleDisplay(){
 //検索ボタンを押すと(クリック)テキストの内容を取り、ジオコーディング(と夜)に掛ける
 const button3 = document.querySelector('#k-button');
 button3.addEventListener('click',clickbutton);
+var clickflg=false;
 function clickbutton(){
   const text_area = $('#k-text').val();
  
   let geocoder1;
+  clickflg=true;
   geocoder1 = new google.maps.Geocoder();             //ジオコーディング型を読んで
 
   geocoder1.geocode( {'address': text_area }          //テキストエリアにある文字列で検索した結果があったらOKなかったらアラートを設定
@@ -81,6 +83,17 @@ if($('#search_tab').length > 0)//「トイレ」と「はんばいき」の押�
   tabSelect(tab_toilet,tab_ATC,search_toilet,search_ATC,tab_tS);
   tabSelect(tab_ATC,tab_toilet,search_ATC,search_toilet);
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+  // ページの読み込みが完了したら、ローダーを非表示にする
+  //const loader = document.getElementById('loader');
+  //loader.style.display = 'none';
+  
+  // デモとして3秒後にローダーを非表示にする
+  setTimeout(function() {
+      loader.style.display = 'none';
+  }, 300); 
+});
 
 function Geocoding(address,flg) //返り値がうまくいかないため使えない関数
 {
