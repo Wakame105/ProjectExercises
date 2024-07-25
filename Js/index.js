@@ -32,12 +32,15 @@ function toggleDisplay(){
 //検索ボタンを押すと(クリック)テキストの内容を取り、ジオコーディング(と夜)に掛ける
 const button3 = document.querySelector('#k-button');
 button3.addEventListener('click',clickbutton);
-var clickflg=false;
 function clickbutton(){
   const text_area = $('#k-text').val();
  
   let geocoder1;
-  clickflg=true;
+  loader.style.display = 'flex';
+  setTimeout(function() {
+    loader.style.display = 'none';
+  }, 500);
+
   geocoder1 = new google.maps.Geocoder();             //ジオコーディング型を読んで
 
   geocoder1.geocode( {'address': text_area }          //テキストエリアにある文字列で検索した結果があったらOKなかったらアラートを設定
