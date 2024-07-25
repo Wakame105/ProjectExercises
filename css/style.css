@@ -29,8 +29,14 @@ header{
     z-index: 100;
 }
 
-header h3{
-    font-size: 1em;
+header #Title{
+    font-size: 1.5em;
+    padding-left: 5px;
+    list-style: none;
+}
+header #Title a{
+    color: #b30a64;
+    text-decoration: none;
 }
 header nav{
     padding-right: 4em;
@@ -191,8 +197,8 @@ header nav input{
     header{
         padding: 0.5em;
     }
-    header h3{
-        font-size: 12px;
+    header #Title{
+        font-size: 15px;
         width: 40%;
     }
     .mapcontainar{
