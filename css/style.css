@@ -94,6 +94,7 @@ header nav input{
     position: relative;
     width: 49.6%;
     padding: 1em .7em;
+    padding-right: 20px;
     box-sizing: border-box;
     background-color: rgb(199, 174, 224);
     font-size: 114%;

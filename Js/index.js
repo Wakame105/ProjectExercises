@@ -53,6 +53,7 @@ function clickbutton(){
           map.panTo(latlng);
           SetPosition(ConvertLatLng);
           ReSetDistance();
+          map.setZoom(17);
         }
          else 
         { // 失敗した場合
