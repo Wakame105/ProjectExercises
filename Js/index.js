@@ -93,9 +93,6 @@ document.addEventListener("DOMContentLoaded", function() {
   //loader.style.display = 'none';
   
   // デモとして3秒後にローダーを非表示にする
-  setTimeout(function() {
-      loader.style.display = 'none';
-  }, 300); 
 });
 
 function Geocoding(address,flg) //返り値がうまくいかないため使えない関数
@@ -397,6 +394,10 @@ async function loadCSVData(){
 async function initMap() {
  //ここで現在地の座標(緯度経度を取ってくる)
   let position = await getLocationPromise();
+  //時が来たら動いて止まる
+  setTimeout(function() {
+    loader.style.display = 'none';
+  }, 200); 
   if(position==null)
     {
       alert('データの読み込みに失敗' );
@@ -409,7 +410,6 @@ async function initMap() {
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
-  const { collisionBehavior } = await  google.maps.importLibrary("marker");
 
   //マーカーの優先度
   //let collisionBehavior = new google.maps.CollisionBehavior.REQUIRED;
