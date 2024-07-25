@@ -54,6 +54,7 @@ header nav input{
     font-size: 1.5vh;
     width: 80%;
 }
+
 .nearToiletContainar{
     margin: 0;
     padding: .6em 0 .4em;
@@ -89,6 +90,7 @@ header nav input{
     box-sizing: border-box;
     background-color: rgb(199, 174, 224);
     font-size: 114%;
+    text-align: center;
 }
 .T_scrollbox_text{
     cursor: pointer;
